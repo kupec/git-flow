@@ -19,7 +19,20 @@ function finish {
 		git branch -d "$BRANCH"
 }
 
+function start {
+	read -p "feature or bug? " -r branch_kind
+	read -p "jira key: " -r branch_key
+	read -p "description: " -r branch_desc
+	git checkout develop
+	git pull
+	git checkout -b "$branch_kind/$branch_key/$branch_desc"
+}
+
 case $1 in
+	start)
+		start;
+		;;
+
 	merge)
 		merge;
 		;;
