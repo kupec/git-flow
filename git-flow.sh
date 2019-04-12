@@ -1,10 +1,11 @@
 #!/bin/bash
+export GIT_MERGE_AUTOEDIT=no 
 
 function premerge {
 		BRANCH=$(git rev-parse --abbrev-ref HEAD)
 		git checkout develop
 		git pull
-		GIT_MERGE_AUTOEDIT=no git merge --no-ff "$BRANCH"
+		git merge --no-ff "$BRANCH"
 		git push
 }
 
@@ -33,6 +34,27 @@ function start {
 	git checkout -b "$branch_kind/$branch_key${key_delimiter}$branch_desc"
 }
 
+function release {
+	read -p "version: " -r version
+
+	release_branch="release-$version"
+
+	git checkout -b "$release_branch"
+	vim package.json
+	git add --all
+	git commit -m "Increase version to ${version}.0"
+
+	git checkout master
+	git pull
+	git merge --no-ff "$release_branch"
+	git push
+
+	git checkout develop
+	git pull
+	git merge --no-ff "$release_branch"
+	git push
+}
+
 case $1 in
 	start)
 		start;
@@ -44,5 +66,9 @@ case $1 in
 
 	finish)
 		finish;
+		;;
+
+	release)
+		release;
 		;;
 esac;
