@@ -23,9 +23,14 @@ function start {
 	read -p "feature or bug? " -r branch_kind
 	read -p "jira key: " -r branch_key
 	read -p "description: " -r branch_desc
+
+	if [ -n "$branch_key" ]; then
+		key_delimiter=/
+	fi;
+
 	git checkout develop
 	git pull
-	git checkout -b "$branch_kind/$branch_key/$branch_desc"
+	git checkout -b "$branch_kind/$branch_key${key_delimiter}$branch_desc"
 }
 
 case $1 in
