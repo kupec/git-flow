@@ -71,6 +71,30 @@ function continue_release {
     git push
 }
 
+function hotfix {
+    read -p "version: " -r version
+
+    hotfix_branch="hotfix-$version"
+    git checkout -b "$hotfix_branch" master
+
+    echo "Do hotfix and run:"
+    echo "  git-flow finish-hotfix"
+}
+
+function finish_hotfix {
+    hotfix_branch=$(getBranch)
+
+    git checkout master
+    git pull
+    git merge --no-ff "$hotfix_branch"
+    git push
+
+    git checkout develop
+    git pull
+    git merge --no-ff "$hotfix_branch"
+    git push
+}
+
 case $1 in
     start)
         start;
@@ -90,5 +114,13 @@ case $1 in
 
     continue-release)
         continue_release;
+        ;;
+
+    hotfix)
+        hotfix;
+        ;;
+
+    finish-hotfix)
+        finish_hotfix;
         ;;
 esac;
