@@ -44,11 +44,13 @@ function release {
     read -p "version: " -r version
 
     release_branch="release-$version"
-    git checkout -b "$release_branch"
+    git checkout -b "$release_branch" develop
     echo "$version" > "$RELEASE_VERSION_FILE"
 
     echo "Increase version in files and run:"
     echo "  git-flow continue-release"
+    echo "or"
+    echo "  git-flow continue-demo-release"
 }
 
 function continue_release {
@@ -64,6 +66,21 @@ function continue_release {
     git pull
     git merge --no-ff "$release_branch"
     git push
+
+    git checkout develop
+    git pull
+    git merge --no-ff "$release_branch"
+    git push
+}
+
+function continue_demo_release {
+    read -r version < "$RELEASE_VERSION_FILE"
+    rm "$RELEASE_VERSION_FILE"
+
+    release_branch=$(getBranch)
+
+    git add --all
+    git commit -m "Increase version to ${version}.0"
 
     git checkout develop
     git pull
@@ -110,6 +127,10 @@ case $1 in
 
     release)
         release;
+        ;;
+
+    continue-demo-release)
+        continue_demo_release;
         ;;
 
     continue-release)
