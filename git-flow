@@ -32,12 +32,12 @@ function start {
     read -p "description: " -r branch_desc
 
     if [ -n "$branch_key" ]; then
-        key_delimiter=/
+        key_delimiter=_
     fi;
 
     git checkout develop
     git pull
-    git checkout -b "$branch_kind/$branch_key${key_delimiter}$branch_desc"
+    git checkout -b "$branch_kind${key_delimiter}$branch_key${key_delimiter}$branch_desc"
 }
 
 function release {
