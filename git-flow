@@ -31,13 +31,15 @@ function start {
     read -p "jira key: " -r branch_key
     read -p "description: " -r branch_desc
 
+    key_delimiter="_"
+
     if [ -n "$branch_key" ]; then
-        key_delimiter=_
+        jira_key_delimiter=$key_delimiter
     fi;
 
     git checkout develop
     git pull
-    git checkout -b "$branch_kind${key_delimiter}$branch_key${key_delimiter}$branch_desc"
+    git checkout -b "$branch_kind${key_delimiter}${branch_key}${jira_key_delimiter}$branch_desc"
 }
 
 function release {
