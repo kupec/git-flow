@@ -31,7 +31,7 @@ function start {
     read -p "jira key: " -r branch_key
     read -p "description: " -r branch_desc
 
-    key_delimiter="_"
+    key_delimiter="/"
 
     if [ -n "$branch_key" ]; then
         jira_key_delimiter=$key_delimiter
